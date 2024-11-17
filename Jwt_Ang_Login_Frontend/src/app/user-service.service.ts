@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Users } from './users';
 import { Observable } from 'rxjs';
@@ -10,21 +10,26 @@ import { environment } from '../environments/environment';
 export class UserServiceService {
 
   //private userUrl : string;
-  private basUrl = "http://localhost:8080/user"
+ // private basUrl = "http://localhost:8080/jwtAuthen"
+  // private baseUrl = environment.apiUrl ;  // Use environment variable or default value
+  private baseUrl = "http://localhost:8080/jwtAuthen";
 
+ httpClients = inject(HttpClient);
 
- // httpClient = inject(HttpClient);
+  headers = new HttpHeaders({
+    'Content-Type' : 'application/json'
+    //  "Authorization" : "Bearer "
 
+  });
   constructor(private httpClient : HttpClient) {
-    this.basUrl = environment.apiUrl;
+   
+    
 
-    const header = {
-      "Authorization" : "Bearer "
-    }
+   
   }
 
-  public findAll(data : any) {
-    return this.httpClient.get<Users[]>('${this.basUrl}/login',data);
+  public onClickLogin(param: any) {
+    return this.httpClient.post(`${this.baseUrl}/login`, param, { headers: this.headers });
   }
 
   // signup(data: any) {

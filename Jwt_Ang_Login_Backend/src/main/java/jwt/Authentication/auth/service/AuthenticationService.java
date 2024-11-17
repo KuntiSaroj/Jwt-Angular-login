@@ -38,7 +38,7 @@ public class AuthenticationService {
 	    	System.out.println("passord--" + input.getPassword());
 	    	System.out.println("passord--" + input.getFullName());
 	        User user = new User();
-	        user.setEmail("Ksaroj08@gmail.com");
+	        user.setUsername("Ksaroj08@gmail.com");
 	        user.setPassword(passwordEncoder.encode("ksaroj"));
 	        user.setFullName("Kunti Saroj");
 	        
@@ -50,15 +50,19 @@ public class AuthenticationService {
 	    }
 
 	    public User authenticate(LoginUserDto input) {
-	        authenticationManager.authenticate(
-	                new UsernamePasswordAuthenticationToken(
-	                        "Ksaroj08@gmail.com",
-	                        "ksaroj"
-	                )
-	        );
+	    	User u = new User();
+	    	u.setFullName("");
+	    	u.setUsername("ksaroj");
+	    	return u;
+//	        authenticationManager.authenticate(
+//	                new UsernamePasswordAuthenticationToken(
+//	                        "ksaroj",
+//	                        "ksaroj123"
+//	                )
+//	        );
 
-	        return userRepository.findByEmail("Ksaroj08@gmail.com")
-	                .orElseThrow();
+//	        return userRepository.findByUsername("ksaroj123")
+//	                .orElseThrow();
 	    }
 
 }

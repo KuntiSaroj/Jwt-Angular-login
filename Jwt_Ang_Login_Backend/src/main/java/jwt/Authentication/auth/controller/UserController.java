@@ -15,54 +15,50 @@ import jwt.Authentication.auth.entity.User;
 import jwt.Authentication.auth.service.AuthenticationService;
 import jwt.Authentication.auth.service.JwtService;
 
-@CrossOrigin(origins = "http://localhost:8080")
-@RequestMapping("/auth")
+//@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/jwtAuthen")
 @RestController
 public class UserController {
-	
-	
 
-		
-		
 	@Autowired
-		 private JwtService jwtService;
-		    
-		 @Autowired
-		    private AuthenticationService authenticationService;
+	private JwtService jwtService;
+
+	@Autowired
+	private AuthenticationService authenticationService;
 
 //		    public void AuthenticationController(JwtService jwtService, AuthenticationService authenticationService) {
 //		        this.jwtService = jwtService;
 //		        this.authenticationService = authenticationService;
 //		    }
 
-		    @PostMapping("/signup")
-		    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
-		    	System.out.println("registerUserDto"+ registerUserDto.getPassword());
-		        User registeredUser = authenticationService.signup(registerUserDto);
+//		    @PostMapping("/signup")
+//		    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+//		    	System.out.println("registerUserDto"+ registerUserDto.getPassword());
+//		        User registeredUser = authenticationService.signup(registerUserDto);
+//
+//		        return ResponseEntity.ok(registeredUser);
+//		    }
 
-		        return ResponseEntity.ok(registeredUser);
-		    }
+	@PostMapping("/login")
+	public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
 
-		    @PostMapping("/login")
-		    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-		        User authenticatedUser = authenticationService.authenticate(loginUserDto);
+		System.out.println("loginUserDto--" + loginUserDto.getPassword() + "username" + loginUserDto.getUsername());
 
-		        String jwtToken = jwtService.generateToken(authenticatedUser);
+		User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
-		        LoginResponse loginResponse = new LoginResponse()
-		        	    .setToken(jwtToken)
-		        	    .setExpiresIn(jwtService.getExpirationTime());
+		String jwtToken = jwtService.generateToken(authenticatedUser);
 
-		        return ResponseEntity.ok(loginResponse);
-		    }
-		    
-			@PostMapping("/HomePage")
-			public String loginPage() {
-				System.out.println("login page here");
-				return "login successfully";
-			}
+		LoginResponse loginResponse = new LoginResponse().setToken(jwtToken)
+				.setExpiresIn(jwtService.getExpirationTime());
 
-
+		return ResponseEntity.ok(loginResponse);
 	}
 
+	@PostMapping("/HomePage")
+	public String loginPage() {
+		System.out.println("login page here");
+		return "login successfully";
+	}
 
+}
